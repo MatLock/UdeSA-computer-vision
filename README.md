@@ -65,4 +65,4 @@ deep-tagger-ui/
 
 ## Author
 
-Juan Francisco Flores — jfflores90@gmail.com
+Jorge Federico Flores — jfflores90@gmail.com
