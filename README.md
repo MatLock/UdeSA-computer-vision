@@ -1,67 +1,18 @@
-# Deep Tagger
+# UdeSA Computer Vision
 
-A web application for AI-powered image tagging built as part of a Computer Vision course project at Universidad de San Andrés (UdeSA).
+A Computer Vision course project at Universidad de San Andrés (UdeSA), consisting of tools for AI-powered image tagging and dataset preparation.
 
-Users submit a product image URL, and the application returns AI-generated predictions including the product title, type, description, and visual tags overlaid on the image.
+## Deep Tagger UI
 
-## Features
+A React web application for AI-powered image tagging. Users submit a product image URL and receive AI-generated predictions including the product title, type, description, and visual tags overlaid on the image.
 
-- Image URL input with validation
-- AI-powered product prediction (title, type, description, tags)
-- Animated tag overlays displayed on the image
-- Responsive Material Design UI
+See [`deep-tagger-ui/README.md`](deep-tagger-ui/README.md) for setup and usage details.
 
-## Tech Stack
+## Image Puller
 
-- **React** 19 with React Router
-- **Material-UI (MUI)** v9 for components and theming
-- **Emotion** for CSS-in-JS styling
-- **Create React App** for build tooling
+A Python utility that downloads product images from tagged CSV files and records their local paths. It supports multiple product types (tops, dresses, pants) and organizes downloaded images by category.
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v16 or higher recommended)
-- npm
-
-### Installation
-
-```bash
-cd deep-tagger-ui
-npm install
-```
-
-### Development
-
-```bash
-npm start
-```
-
-Opens the app at [http://localhost:3000](http://localhost:3000).
-
-### Production Build
-
-```bash
-npm run build
-```
-
-## Project Structure
-
-```
-deep-tagger-ui/
-├── src/
-│   ├── pages/
-│   │   ├── Landing/    # Home page with URL input
-│   │   └── Results/    # Prediction results with tag overlays
-│   ├── components/
-│   │   ├── Loading/    # Loading spinner
-│   │   └── Toast/      # Notification toasts
-│   ├── services/
-│   │   └── api.js      # Prediction API client
-│   ├── theme.js        # MUI custom theme
-│   └── App.js          # Root component with routing
-```
+See [`img-puller/README.md`](img-puller/README.md) for setup and usage details.
 
 ## Author
 

@@ -1,0 +1,6 @@
+data/images/*
+data/.DS_Store
+.venv
+.idea
+.DS_Store
+UdeSA-Img-Puller.iml
