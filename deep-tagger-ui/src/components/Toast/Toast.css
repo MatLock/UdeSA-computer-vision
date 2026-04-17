@@ -1,0 +1,19 @@
+.toast-alert {
+  min-width: 220px !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  padding: 2px 12px !important;
+}
+
+.toast-alert .MuiAlert-icon {
+  font-size: 18px !important;
+  padding: 6px 0 !important;
+}
+
+.toast-alert .MuiAlert-message {
+  padding: 6px 0 !important;
+}
+
+.toast-alert .MuiAlert-action {
+  padding: 2px 0 0 8px !important;
+}
