@@ -1,0 +1,1 @@
+from .knn_model import predict_k_colors
