@@ -60,5 +60,4 @@ def predict_k_colors(image_url: str) -> tuple[set, list]:
     img_array = download_image(image_url)
     no_bg = remove_specific_color_background(img_array)
     dominant_colors = _extract_dominant_colors(no_bg)
-    print(dominant_colors)
     return _dominant_color_names(dominant_colors), dominant_colors
