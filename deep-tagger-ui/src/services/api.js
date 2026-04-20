@@ -1,8 +1,14 @@
-const PREDICT_URL = 'https://047282ea-cd44-496b-a00d-30af8e6cddcc.mock.pstmn.io/image';
+const PREDICT_URL = 'http://localhost:8080/predict-image';
 
 async function predictTags(imageUrl) {
-  const url = `${PREDICT_URL}?imageUrl=${encodeURIComponent(imageUrl)}`;
-  const response = await fetch(url, { method: 'GET' });
+  const response = await fetch(PREDICT_URL, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ image_url: imageUrl }),
+  });
   if (!response.ok) {
     throw new Error(`Request failed: ${response.status} ${response.statusText}`);
   }

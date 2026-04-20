@@ -2,7 +2,11 @@ import uvicorn
 from fastapi import FastAPI
 from model.request.DeepTaggerRequest import DeepTaggerRequest
 from model.response.DeepTaggerResponse import DeepTaggerResponse
-from machine_learning import predict_k_colors
+from aux_functions.aux import download_image
+from machine_learning import knn_model
+from transformer import blip_transformer
+from deep_learning import product_type_classifier
+from llm import claude_client
 
 app = FastAPI()
 
@@ -13,19 +17,24 @@ async def root():
 
 
 @app.post("/predict-image")
-async def say_hello(request: DeepTaggerRequest) -> DeepTaggerResponse:
+def predict_from_image(request: DeepTaggerRequest) -> DeepTaggerResponse:
+  img_array = download_image(request.image_url)
   tags = {
-    "color": "Blue/Navy-Blue",
+    "color": "/".join(knn_model.predict_k_colors(img_array)[0]),
     "material": "Denim",
     "occasion": "Casual",
     "season": "Summer"
   }
-  deep_tagger_response = DeepTaggerResponse(product_type='shirt',
-                                          title='Blue Denim shirt',
-                                          description='Comfortable and stylish blue denim shirt for everyday wear.',
+  product_type = product_type_classifier.predict(img_array)
+  title = blip_transformer.predict_product_title(img_array)
+  description = claude_client.generate_product_description(product_type, title, tags)
+  deep_tagger_response = DeepTaggerResponse(product_type=product_type,
+                                          title=title,
+                                          description=description,
                                           tags=tags)
   return deep_tagger_response
 
+# test url https://i.postimg.cc/DwnSW-Dnh/test-shirt.avif
 
 if __name__ == "__main__":
   uvicorn.run(app, host="0.0.0.0", port=8080)

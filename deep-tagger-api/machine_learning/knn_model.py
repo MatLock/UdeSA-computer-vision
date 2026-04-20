@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.cluster import KMeans
-from aux_functions.aux import download_image , remove_specific_color_background
+from aux_functions.aux import remove_specific_color_background
 
 BASE_COLORS = {
     "red": [255, 0, 0],
@@ -56,8 +56,7 @@ def _extract_dominant_colors(img_array: np.ndarray) -> list:
   return dominant_colors.tolist()
 
 
-def predict_k_colors(image_url: str) -> tuple[set, list]:
-    img_array = download_image(image_url)
+def predict_k_colors(img_array: np.ndarray) -> tuple[set, list]:
     no_bg = remove_specific_color_background(img_array)
-    dominant_colors = _extract_dominant_colors(no_bg)
-    return _dominant_color_names(dominant_colors), dominant_colors
+    dominant_colors_rgb = _extract_dominant_colors(no_bg)
+    return _dominant_color_names(dominant_colors_rgb), dominant_colors_rgb

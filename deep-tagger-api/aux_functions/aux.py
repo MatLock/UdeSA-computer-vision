@@ -12,11 +12,16 @@ def download_image(image_url: str) -> np.ndarray:
   return np.array(img)
 
 def remove_specific_color_background(img_array: np.ndarray, background_color=(255, 255, 255),
-                                     threshold=30) -> np.ndarray:
-  rgb = img_array[:, :, :3]
-  diff = np.abs(rgb.astype(int) - np.array(background_color, dtype=int))
-  mask = np.all(diff <= threshold, axis=2)
+                                     threshold=10) -> np.ndarray:
+  img = Image.fromarray(img_array).convert("RGBA")
+  datas = img.getdata()
+  newData = []
 
-  result = img_array.copy()
-  result[mask] = [255, 255, 255, 0]
-  return result
+  for item in datas:
+    if all(abs(c - tc) <= threshold for c, tc in zip(item[:3], background_color)):
+      newData.append((255, 255, 255, 0))
+    else:
+      newData.append(item)
+
+  img.putdata(newData)
+  return np.array(img)
