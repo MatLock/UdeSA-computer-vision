@@ -4,7 +4,7 @@ async function predictTags(imageUrl) {
   const response = await fetch(PREDICT_URL, {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
+      'Accept': 'applicatiwon/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ image_url: imageUrl }),
