@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from model.request.DeepTaggerRequest import DeepTaggerRequest
 from model.response.DeepTaggerResponse import DeepTaggerResponse
 from aux_functions.aux import download_image
@@ -9,6 +10,13 @@ from deep_learning import product_type_classifier
 from llm import claude_client
 
 app = FastAPI()
+
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=["http://localhost:3000"],
+  allow_methods=["*"],
+  allow_headers=["*"],
+)
 
 
 @app.get("/")
