@@ -31,6 +31,7 @@
   position: relative;
   display: inline-block;
   max-width: 100%;
+  padding: 0 120px;
 }
 
 .results-image {
@@ -53,12 +54,12 @@
 }
 
 .results-tags-left {
-  left: 8px;
+  left: 0;
   align-items: flex-start;
 }
 
 .results-tags-right {
-  right: 8px;
+  right: 0;
   align-items: flex-end;
 }
 
@@ -160,5 +161,9 @@
   .results-panel,
   .results-image-panel {
     padding: 16px;
+  }
+
+  .results-image-wrapper {
+    padding: 0 70px;
   }
 }
