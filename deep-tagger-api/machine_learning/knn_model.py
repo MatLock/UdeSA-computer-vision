@@ -27,7 +27,7 @@ BASE_COLORS = {
     "beige": [245, 222, 179],
 }
 
-K_NEIGHBORS = 2
+K_NEIGHBORS = 1
 
 def _classify_color(rgb) -> str:
     rgb = np.array(rgb)

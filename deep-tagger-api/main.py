@@ -46,7 +46,7 @@ def predict_from_image(request: DeepTaggerRequest) -> DeepTaggerResponse:
 # https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1736358500-baggy-jeans-compras-01-677eba422b2c3.jpg?crop=1xw:1xh;center,top&resize=980:*
 # https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGcQl0wyZ3PXFgTTYTfRHsK3YhvQ53i81ZQQ&s
 #https://xcdn.next.co.uk/common/items/default/default/itemimages/3_4Ratio/product/lge/U88491s2.jpg?im=Resize,width=750
-#https://www.clker.com/cliparts/x/o/6/a/t/J/red-dress-hi.png
-
+#https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSra_o0SB7t5Gb4GL5x-X7guFvalP2iVbJjPCHOs8623sGzIOP6MrQgs-A0T_go0cS2CCGNijpPC2dSsBI4PLCbYU8Cp_DVquVqbK7tcSOJ3AzBLoGzEKZv1Dw
+#https://theblacktux.com/cdn/shop/files/black-patent-leather-shoes-204587.jpg?v=1741187566&width=1200
 if __name__ == "__main__":
   uvicorn.run(app, host="0.0.0.0", port=8080)
