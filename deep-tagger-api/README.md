@@ -166,7 +166,7 @@ deep-tagger-api/
 ├── model/
 │   ├── request/DeepTaggerRequest.py
 │   └── response/DeepTaggerResponse.py
-├── aux_functions/aux.py           # Image download & preprocessing
+├── aux_functions/auxiliary.py     # Image download & preprocessing
 ├── machine_learning/knn_model.py  # K-Means + KNN color extraction
 ├── transformer/blip_transformer.py# BLIP title generation
 ├── deep_learning/

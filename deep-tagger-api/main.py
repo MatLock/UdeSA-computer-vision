@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from model.request.DeepTaggerRequest import DeepTaggerRequest
 from model.response.DeepTaggerResponse import DeepTaggerResponse
-from aux_functions.aux import download_image
+from aux_functions.auxiliary import download_image
 from machine_learning import knn_model
 from transformer import blip_transformer
 from deep_learning import product_type_classifier

@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.cluster import KMeans
-from aux_functions.aux import remove_specific_color_background
+from aux_functions.auxiliary import remove_specific_color_background
 
 BASE_COLORS = {
     "red": [255, 0, 0],
