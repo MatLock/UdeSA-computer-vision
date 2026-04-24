@@ -13,11 +13,11 @@ from io import BytesIO
 
 def detect_product_type(filepath: str) -> str:
     filename = Path(filepath).stem.lower()
-    for product_type in ("dresses", "tops", "pants"):
+    for product_type in ("shoes", "tops", "pants"):
         if product_type in filename:
             return product_type
     sys.exit(f"Error: could not detect product type from filename '{Path(filepath).name}'. "
-             "Expected filename containing 'dresses', 'tops', or 'pants'.")
+             "Expected filename containing 'shoes', 'tops', or 'pants'.")
 
 
 def download_image(url: str, dest: str) -> bool:
