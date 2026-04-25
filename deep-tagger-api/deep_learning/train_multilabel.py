@@ -199,19 +199,27 @@ def _build_transforms(train: bool) -> transforms.Compose:
 # ---------------------------------------------------------------------------
 # Model
 # ---------------------------------------------------------------------------
-def build_model(n_logits: int, pretrained: bool = True) -> nn.Module:
-    """ResNet18 with a sigmoid head of n_logits.
+class MultilabelClassifier(nn.Module):
+    """ResNet18 backbone with a multi-label linear head of `n_logits` outputs.
 
     By default we start from ImageNet-pretrained weights (one-time download to
     ~/.cache/torch on first run). The transferred features make the small
     fashion dataset much more tractable than training from scratch — expect a
     sizeable lift in val F1 and subset accuracy. Pass `pretrained=False` to
-    train from scratch instead (the previous behavior).
+    train from scratch instead.
+
+    The head produces raw logits; apply `torch.sigmoid` at inference time and
+    threshold at 0.5 (or argmax per attribute group) to recover predictions.
     """
-    weights = ResNet18_Weights.IMAGENET1K_V1 if pretrained else None
-    model = resnet18(weights=weights)
-    model.fc = nn.Linear(model.fc.in_features, n_logits)
-    return model
+
+    def __init__(self, n_logits: int, pretrained: bool = True):
+        super().__init__()
+        weights = ResNet18_Weights.IMAGENET1K_V1 if pretrained else None
+        self.backbone = resnet18(weights=weights)
+        self.backbone.fc = nn.Linear(self.backbone.fc.in_features, n_logits)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.backbone(x)
 
 
 # ---------------------------------------------------------------------------
@@ -314,7 +322,7 @@ def train_one(
         num_workers=num_workers, pin_memory=pin,
     )
 
-    model = build_model(n_logits, pretrained=pretrained).to(device)
+    model = MultilabelClassifier(n_logits, pretrained=pretrained).to(device)
     print(f"[model] resnet18  pretrained={pretrained}  n_logits={n_logits}")
     criterion = nn.BCEWithLogitsLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
