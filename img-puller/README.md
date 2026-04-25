@@ -1,47 +1,52 @@
 # UdeSa Image Puller
 
-Descarga imágenes de productos desde archivos CSV etiquetados y registra sus rutas locales.
+Downloads product images from tagged CSV files and records their local paths.
 
-## Requisitos
+## Requirements
 
 - Python 3.8+
-- Librería `requests`
+- `requests` library
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Uso
+## Usage
 
 ```bash
-python main.py <ruta-al-csv>
+python main.py <path-to-csv>
 ```
 
-### Ejemplos
+### Examples
 
 ```bash
 python main.py data/tops_tags.csv
-python main.py data/shoes_tags.csv
+python main.py data/dresses_tags.csv
 python main.py data/pants_tags.csv
 ```
 
-## Qué hace
+## What it does
 
-1. Lee el archivo CSV y detecta el tipo de producto a partir del nombre del archivo (`tops`, `shoes` o `pants`).
-2. Descarga cada imagen desde la columna `image_url` en `images/<product_type>/`.
-3. Agrega una columna `relative_path` al CSV con la ruta local de cada imagen descargada.
+1. Reads the CSV file and detects the product type from the filename (`tops`, `dresses`, or `pants`).
+2. Downloads each image from the `image_url` column into `images/<product_type>/`.
+3. Adds a `relative_path` column to the CSV with the local path to each downloaded image.
 
-## Estructura de salida
+## Output structure
 
 ```
 .
 ├── data/
 │   ├── tops_tags.csv
-│   ├── shoes_tags.csv
+│   ├── dresses_tags.csv
 │   └── pants_tags.csv
 ├── images/
 │   ├── tops/
-│   ├── shoes/
+│   ├── dresses/
 │   └── pants/
 └── main.py
 ```
+
+## Authors
+Jorge flores - jfflores90@gmail.com
+Hernán Marano - herchugm@gmail.com
+Nicolás Velázquez - 

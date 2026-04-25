@@ -1,27 +1,69 @@
-# UdeSA Computer Vision
+# Deep Tagger
 
-Proyecto del curso de Computer Vision en la Universidad de San Andrés (UdeSA), que reúne herramientas para el etiquetado de imágenes con IA y la preparación de datasets.
+A web application for AI-powered image tagging built as part of a Computer Vision course project at Universidad de San Andrés (UdeSA).
 
-## Deep Tagger UI
+Users submit a product image URL, and the application returns AI-generated predictions including the product title, type, description, and visual tags overlaid on the image.
 
-Aplicación web en React para el etiquetado de imágenes con IA. Los usuarios envían la URL de una imagen de producto y reciben predicciones generadas por IA, que incluyen el título, el tipo, la descripción y las etiquetas visuales superpuestas sobre la imagen.
+## Features
 
-Ver [`deep-tagger-ui/README.md`](deep-tagger-ui/README.md) para los detalles de instalación y uso.
+- Image URL input with validation
+- AI-powered product prediction (title, type, description, tags)
+- Animated tag overlays displayed on the image
+- Responsive Material Design UI
 
-## Deep Tagger API
+## Tech Stack
 
-Backend en FastAPI que genera metadatos de productos de e-commerce a partir de la URL de una sola imagen. Encadena cuatro modelos de IA/ML en un pipeline: una CNN TinyVGG clasifica el tipo de producto, K-Means extrae los colores dominantes, un transformer visión-lenguaje BLIP genera el título del producto y el LLM Claude produce la descripción.
+- **React** 19 with React Router
+- **Material-UI (MUI)** v9 for components and theming
+- **Emotion** for CSS-in-JS styling
+- **Create React App** for build tooling
 
-Ver [`deep-tagger-api/README.md`](deep-tagger-api/README.md) para los detalles de instalación y uso.
+## Getting Started
 
-## Image Puller
+### Prerequisites
 
-Utilidad en Python que descarga imágenes de productos desde archivos CSV etiquetados y registra sus rutas locales. Soporta múltiples tipos de productos (tops, vestidos, pantalones) y organiza las imágenes descargadas por categoría.
+- Node.js (v16 or higher recommended)
+- npm
 
-Ver [`img-puller/README.md`](img-puller/README.md) para los detalles de instalación y uso.
+### Installation
 
-## Autor
+```bash
+cd deep-tagger-ui
+npm install
+```
 
-Jorge Federico Flores — jfflores90@gmail.com
+### Development
+
+```bash
+npm start
+```
+
+Opens the app at [http://localhost:3000](http://localhost:3000).
+
+### Production Build
+
+```bash
+npm run build
+```
+
+## Project Structure
+
+```
+deep-tagger-ui/
+├── src/
+│   ├── pages/
+│   │   ├── Landing/    # Home page with URL input
+│   │   └── Results/    # Prediction results with tag overlays
+│   ├── components/
+│   │   ├── Loading/    # Loading spinner
+│   │   └── Toast/      # Notification toasts
+│   ├── services/
+│   │   └── api.js      # Prediction API client
+│   ├── theme.js        # MUI custom theme
+│   └── App.js          # Root component with routing
+```
+
+## Authors
+Jorge flores - jfflores90@gmail.com
 Hernán Marano - herchugm@gmail.com
 Nicolás Velázquez - 

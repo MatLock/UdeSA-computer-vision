@@ -27,7 +27,7 @@ BASE_COLORS = {
     "beige": [245, 222, 179],
 }
 
-K_NEIGHBORS = 1
+K_CLUSTERS= 1
 
 def _classify_color(rgb) -> str:
     rgb = np.array(rgb)
@@ -50,7 +50,7 @@ def _extract_dominant_colors(img_array: np.ndarray) -> list:
   rgb = img_array[:, :, :3]
   # Keep only non-transparent pixels
   opaque_pixels = rgb[alpha > 0].reshape((-1, 3))
-  kmeans = KMeans(n_clusters=K_NEIGHBORS, n_init=10, random_state=42)
+  kmeans = KMeans(n_clusters=K_CLUSTERS, n_init=10, random_state=42)
   kmeans.fit(opaque_pixels)
   dominant_colors = np.uint8(kmeans.cluster_centers_)
   return dominant_colors.tolist()

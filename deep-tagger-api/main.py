@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from model.request.DeepTaggerRequest import DeepTaggerRequest
 from model.response.DeepTaggerResponse import DeepTaggerResponse
 from aux_functions.auxiliary import download_image
-from machine_learning import knn_model
+from machine_learning import k_means
 from transformer import blip_transformer
 from deep_learning import product_type_classifier
 from llm import claude_client
@@ -28,7 +28,7 @@ async def root():
 def predict_from_image(request: DeepTaggerRequest) -> DeepTaggerResponse:
   img_array = download_image(request.image_url)
   tags = {
-    "color": "/".join(knn_model.predict_k_colors(img_array)[0]),
+    "color": "/".join(k_means.predict_k_colors(img_array)[0]),
     "material": "Denim",
     "occasion": "Casual",
     "season": "Summer"
