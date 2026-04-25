@@ -1,82 +1,82 @@
 # Deep Tagger API
 
-A FastAPI-based service that automatically generates e-commerce product metadata from a single image URL. It combines multiple AI/ML techniques — a CNN classifier, K-Means color extraction, a vision-language transformer, and an LLM — to produce a structured product listing in one request.
+Servicio basado en FastAPI que genera automáticamente metadatos de productos de e-commerce a partir de la URL de una sola imagen. Combina múltiples técnicas de IA/ML —un clasificador CNN, extracción de colores con K-Means, un transformer visión-lenguaje y un LLM— para producir un listado estructurado del producto en una única request.
 
-## How It Works
+## Cómo Funciona
 
 ```
                          ┌──────────────┐
-                         │  Image URL   │
+                         │   URL Imagen │
                          └──────┬───────┘
                                 │
-                        download & preprocess
+                       descarga & preprocesado
                                 │
               ┌─────────────────┼─────────────────┐
               │                 │                  │
      ┌────────▼────────┐ ┌─────▼──────┐  ┌────────▼────────┐
      │  K-Means + KNN  │ │ TinyVGG CNN│  │  BLIP-2 VLM     │
-     │  Color Extract. │ │ Product    │  │  Title           │
-     │                 │ │ Classifier │  │  Generation      │
+     │  Extracción de  │ │ Clasificad.│  │  Generación de   │
+     │  Colores        │ │ Producto   │  │  Título          │
      └────────┬────────┘ └─────┬──────┘  └────────┬────────┘
               │                │                   │
               └────────┬───────┴───────────────────┘
                        │
                ┌───────▼───────┐
                │  Claude LLM   │
-               │  Description  │
-               │  Generation   │
+               │  Generación   │
+               │  Descripción  │
                └───────┬───────┘
                        │
               ┌────────▼────────┐
-              │ Structured JSON │
-              │    Response     │
+              │ Respuesta JSON  │
+              │  Estructurada   │
               └─────────────────┘
 ```
 
-## Models & Techniques
+## Modelos y Técnicas
 
-### 1. Product Type Classification — CNN (TinyVGG)
+### 1. Clasificación del Tipo de Producto — CNN (TinyVGG)
 
-A custom convolutional neural network trained on **Fashion MNIST** (70k images, 10 classes).
+Una red neuronal convolucional personalizada entrenada sobre **Fashion MNIST** (70k imágenes, 10 clases).
 
-| Detail | Value |
+| Detalle | Valor |
 |---|---|
-| Architecture | TinyVGG — 2 conv blocks (Conv2d -> ReLU -> Conv2d -> ReLU -> MaxPool2d) + linear classifier |
-| Input | 28x28 grayscale image |
-| Output | One of 10 classes: T-shirt/top, Pants, Pullover, Dress, Coat, Sandal, Shirt, Sneaker, Bag, Ankle boot |
-| Weights | `deep_learning/torch_state/fashion_model_classifier_tiny_vgg_v2.pth` |
+| Arquitectura | TinyVGG — 2 bloques conv (Conv2d -> ReLU -> Conv2d -> ReLU -> MaxPool2d) + clasificador lineal |
+| Entrada | Imagen en escala de grises de 28x28 |
+| Salida | Una de 10 clases: T-shirt/top, Pants, Pullover, Dress, Coat, Sandal, Shirt, Sneaker, Bag, Ankle boot |
+| Pesos | `deep_learning/torch_state/fashion_model_classifier_tiny_vgg_v2.pth` |
 
-At inference time, the input image is resized to 28x28, converted to grayscale, color-inverted (to match Fashion MNIST conventions), and normalized before being fed to the model.
+En tiempo de inferencia, la imagen de entrada se redimensiona a 28x28, se convierte a escala de grises, se invierten los colores (para coincidir con las convenciones de Fashion MNIST) y se normaliza antes de alimentarla al modelo.
 
-**Source:** `deep_learning/product_type_classifier.py`
+**Fuente:** `deep_learning/product_type_classifier.py`
 
-### 2. Dominant Color Extraction — K-Means Clustering + KNN
+### 2. Extracción de Colores Dominantes — K-Means + KNN
 
-A traditional ML pipeline that identifies the dominant colors of the product.
+Un pipeline de ML tradicional que identifica los colores dominantes del producto.
 
-1. The image background is removed (white/transparent pixels are discarded).
-2. **K-Means clustering** (k=2) groups the remaining pixels into two dominant color clusters.
-3. Each cluster centroid is matched to the nearest named color from a 22-color dictionary using **Euclidean distance** in RGB space.
+1. Se elimina el fondo de la imagen (los píxeles blancos/transparentes se descartan).
+2. **K-Means clustering** (k=2) agrupa los píxeles restantes en dos clusters de colores dominantes.
+3. Cada centroide del cluster se asocia al color con nombre más cercano de un diccionario de 22 colores usando **distancia euclídea** en el espacio RGB.
 
-This returns human-readable color names (e.g. "navy blue", "red") without any deep learning overhead.
+Esto devuelve nombres de colores legibles para humanos (p. ej. "navy blue", "red") sin la sobrecarga del deep learning.
 
-**Source:** `machine_learning/knn_model.py`
+**Fuente:** `machine_learning/knn_model.py`
 
-### 3. Product Title Generation — BLIP Vision-Language Transformer
+### 3. Generación del Título del Producto — Transformer Visión-Lenguaje BLIP
 
-Uses the pre-trained **Salesforce/blip-image-captioning-base** model from Hugging Face to generate a short product title from the image.
+Utiliza el modelo pre-entrenado **Salesforce/blip-image-captioning-base** de Hugging Face para generar un título corto del producto a partir de la imagen.
 
-The model receives the image along with the prompt *"the product name is"* and generates up to 10 tokens to complete it. The result is a concise product name like "short sleeve cotton tee".
+El modelo recibe la imagen junto con el prompt *"the product name is"* y genera hasta 10 tokens para completarlo. El resultado es un nombre conciso de producto como "short sleeve cotton tee".
 
-**Source:** `transformer/blip_transformer.py`
+**Fuente:** `transformer/blip_transformer.py`
 
-### 4. Product Description Generation — Claude LLM
+### 4. Generación de la Descripción del Producto — LLM Claude
 
-Once the product type, title, and tags have been determined by the previous models, they are sent to **Anthropic's Claude** (`claude-sonnet-4-20250514`) to generate a 2–3 sentence product description suitable for an e-commerce listing.
+Una vez determinados el tipo de producto, el título y las etiquetas por los modelos previos, se envían a **Claude de Anthropic** (`claude-sonnet-4-20250514`) para generar una descripción de 2 a 3 oraciones apta para un listado de e-commerce.
 
-If no API key is configured, the endpoint still works and returns a placeholder description.
+Si no se configura una API key, el endpoint sigue funcionando y devuelve una descripción placeholder.
 
-**Source:** `llm/claude_client.py`
+**Fuente:** `llm/claude_client.py`
 
 ## API
 
@@ -90,7 +90,7 @@ Health check.
 
 ### `POST /predict-image`
 
-Generate product metadata from an image URL.
+Genera metadatos de producto a partir de la URL de una imagen.
 
 **Request:**
 
@@ -116,16 +116,16 @@ Generate product metadata from an image URL.
 }
 ```
 
-> **Note:** `material`, `occasion`, and `season` are currently hardcoded placeholders. Only `color` is dynamically predicted.
+> **Nota:** `material`, `occasion` y `season` son actualmente placeholders hardcodeados. Solo `color` se predice dinámicamente.
 
-Interactive docs are available at `/docs` (Swagger UI) and `/redoc` once the server is running.
+La documentación interactiva está disponible en `/docs` (Swagger UI) y `/redoc` una vez que el servidor esté corriendo.
 
-## Getting Started
+## Primeros Pasos
 
-### Prerequisites
+### Requisitos previos
 
 - Python 3.12+
-- An Anthropic API key (optional — the API still works without it)
+- Una API key de Anthropic (opcional — la API funciona aunque no se provea)
 
 ### Setup
 
@@ -135,21 +135,21 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Set the API key for description generation (optional):
+Configurar la API key para la generación de descripciones (opcional):
 
 ```bash
 export ANTHROPIC_API_KEY=your_key_here
 ```
 
-### Run
+### Ejecutar
 
 ```bash
 python main.py
 ```
 
-The server starts on `http://0.0.0.0:8080`.
+El servidor arranca en `http://0.0.0.0:8080`.
 
-### Example
+### Ejemplo
 
 ```bash
 curl -X POST http://localhost:8080/predict-image \
@@ -157,37 +157,37 @@ curl -X POST http://localhost:8080/predict-image \
   -d '{"image_url": "https://i.postimg.cc/DwnSW-Dnh/test-shirt.avif"}'
 ```
 
-## Project Structure
+## Estructura del Proyecto
 
 ```
 deep-tagger-api/
-├── main.py                        # FastAPI app & prediction endpoint
+├── main.py                        # App FastAPI y endpoint de predicción
 ├── requirements.txt
 ├── model/
 │   ├── request/DeepTaggerRequest.py
 │   └── response/DeepTaggerResponse.py
-├── aux_functions/auxiliary.py     # Image download & preprocessing
-├── machine_learning/knn_model.py  # K-Means + KNN color extraction
-├── transformer/blip_transformer.py# BLIP title generation
+├── aux_functions/auxiliary.py     # Descarga y preprocesado de imagen
+├── machine_learning/knn_model.py  # Extracción de colores K-Means + KNN
+├── transformer/blip_transformer.py# Generación de título con BLIP
 ├── deep_learning/
-│   ├── product_type_classifier.py # TinyVGG CNN classifier
-│   └── torch_state/               # Saved model weights
-├── llm/claude_client.py           # Claude description generation
-└── notebook/                      # Training & exploration notebooks
+│   ├── product_type_classifier.py # Clasificador CNN TinyVGG
+│   └── torch_state/               # Pesos del modelo guardados
+├── llm/claude_client.py           # Generación de descripción con Claude
+└── notebook/                      # Notebooks de entrenamiento y exploración
     ├── fashion_model_classifier_tiny_vgg.ipynb
     ├── multi_headed_cnn.ipynb
     └── knn.ipynb
 ```
 
-## Tech Stack
+## Stack Tecnológico
 
-- **FastAPI** + **Uvicorn** — API server
-- **PyTorch** + **torchvision** — CNN training & inference
-- **Hugging Face Transformers** — BLIP vision-language model
-- **scikit-learn** — K-Means clustering
-- **OpenCV** + **Pillow** — image processing
-- **Anthropic SDK** — Claude LLM integration
+- **FastAPI** + **Uvicorn** — servidor de la API
+- **PyTorch** + **torchvision** — entrenamiento e inferencia de la CNN
+- **Hugging Face Transformers** — modelo visión-lenguaje BLIP
+- **scikit-learn** — clustering K-Means
+- **OpenCV** + **Pillow** — procesamiento de imágenes
+- **Anthropic SDK** — integración con el LLM Claude
 
-## Author
+## Autor
 
 jfflores90@gmail.com

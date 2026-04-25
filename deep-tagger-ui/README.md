@@ -1,64 +1,64 @@
 # Deep Tagger
 
-A web application for AI-powered image tagging built as part of a Computer Vision course project at Universidad de San Andrés (UdeSA).
+Aplicación web para el etiquetado de imágenes con IA, desarrollada como parte del proyecto del curso de Computer Vision en la Universidad de San Andrés (UdeSA).
 
-Users submit a product image URL, and the application returns AI-generated predictions including the product title, type, description, and visual tags overlaid on the image.
+Los usuarios envían la URL de una imagen de producto y la aplicación devuelve predicciones generadas por IA, que incluyen el título, el tipo, la descripción y las etiquetas visuales superpuestas sobre la imagen.
 
-## Features
+## Características
 
-- Image URL input with validation
-- AI-powered product prediction (title, type, description, tags)
-- Animated tag overlays displayed on the image
-- Responsive Material Design UI
+- Entrada de URL de imagen con validación
+- Predicción de producto con IA (título, tipo, descripción, etiquetas)
+- Superposición animada de etiquetas sobre la imagen
+- Interfaz responsive con Material Design
 
-## Tech Stack
+## Stack Tecnológico
 
-- **React** 19 with React Router
-- **Material-UI (MUI)** v9 for components and theming
-- **Emotion** for CSS-in-JS styling
-- **Create React App** for build tooling
+- **React** 19 con React Router
+- **Material-UI (MUI)** v9 para componentes y temas
+- **Emotion** para estilos CSS-in-JS
+- **Create React App** como herramienta de build
 
-## Getting Started
+## Primeros Pasos
 
-### Prerequisites
+### Requisitos previos
 
-- Node.js (v16 or higher recommended)
+- Node.js (se recomienda v16 o superior)
 - npm
 
-### Installation
+### Instalación
 
 ```bash
 cd deep-tagger-ui
 npm install
 ```
 
-### Development
+### Desarrollo
 
 ```bash
 npm start
 ```
 
-Opens the app at [http://localhost:3000](http://localhost:3000).
+Abre la aplicación en [http://localhost:3000](http://localhost:3000).
 
-### Production Build
+### Build de producción
 
 ```bash
 npm run build
 ```
 
-## Project Structure
+## Estructura del Proyecto
 
 ```
 deep-tagger-ui/
 ├── src/
 │   ├── pages/
-│   │   ├── Landing/    # Home page with URL input
-│   │   └── Results/    # Prediction results with tag overlays
+│   │   ├── Landing/    # Página de inicio con entrada de URL
+│   │   └── Results/    # Resultados de predicción con etiquetas superpuestas
 │   ├── components/
-│   │   ├── Loading/    # Loading spinner
-│   │   └── Toast/      # Notification toasts
+│   │   ├── Loading/    # Spinner de carga
+│   │   └── Toast/      # Notificaciones tipo toast
 │   ├── services/
-│   │   └── api.js      # Prediction API client
-│   ├── theme.js        # MUI custom theme
-│   └── App.js          # Root component with routing
+│   │   └── api.js      # Cliente de la API de predicción
+│   ├── theme.js        # Tema personalizado de MUI
+│   └── App.js          # Componente raíz con routing
 ```
