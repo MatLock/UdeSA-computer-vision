@@ -190,4 +190,6 @@ deep-tagger-api/
 
 ## Author
 
-jfflores90@gmail.com
+Jorge flores - jfflores90@gmail.com
+Hernán Marano - herchugm@gmail.com
+Nicolás Velázquez - 

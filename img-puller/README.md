@@ -45,3 +45,8 @@ python main.py data/pants_tags.csv
 │   └── pants/
 └── main.py
 ```
+
+## Authors
+Jorge flores - jfflores90@gmail.com
+Hernán Marano - herchugm@gmail.com
+Nicolás Velázquez - 

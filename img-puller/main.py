@@ -60,7 +60,7 @@ def main():
         ext = os.path.splitext(urlparse(url).path)[1] or ".jpg"
         filename = f"{row['id']}{ext}"
         dest = os.path.join(images_dir, filename)
-        relative_path = os.path.relpath(dest, os.path.dirname(filepath))
+        relative_path = os.path.relpath(dest, os.path.dirname(filepath)).replace(os.sep, "/")
         tasks.append((row, url, dest, relative_path))
 
     # Download images in parallel

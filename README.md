@@ -20,6 +20,8 @@ A Python utility that downloads product images from tagged CSV files and records
 
 See [`img-puller/README.md`](img-puller/README.md) for setup and usage details.
 
-## Author
+## Authors
 
 Jorge Federico Flores — jfflores90@gmail.com
+Hernán Marano - herchugm@gmail.com
+Nicolás Velázquez - 

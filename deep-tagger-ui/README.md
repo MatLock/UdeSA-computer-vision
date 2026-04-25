@@ -62,3 +62,8 @@ deep-tagger-ui/
 │   ├── theme.js        # MUI custom theme
 │   └── App.js          # Root component with routing
 ```
+
+## Authors
+Jorge flores - jfflores90@gmail.com
+Hernán Marano - herchugm@gmail.com
+Nicolás Velázquez - 
