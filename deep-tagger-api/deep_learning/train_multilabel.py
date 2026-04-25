@@ -14,10 +14,13 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import subprocess
+import sys
 from collections import Counter
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -49,6 +52,59 @@ CSV_PATHS = {
 }
 OUT_DIR = Path(__file__).resolve().parent / "torch_state"
 MIN_SAMPLES_PER_CLASS = 20
+
+
+def _git_state(cwd: Path) -> Tuple[Optional[str], Optional[bool]]:
+    """Return (commit_hash, dirty?) of the repo, or (None, None) outside git."""
+    try:
+        commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=str(cwd), text=True, stderr=subprocess.DEVNULL,
+        ).strip()
+        status = subprocess.check_output(
+            ["git", "status", "--porcelain"],
+            cwd=str(cwd), text=True, stderr=subprocess.DEVNULL,
+        ).strip()
+        return commit, bool(status)
+    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
+        return None, None
+
+
+def _capture_training_metadata(
+    *, args: argparse.Namespace, device: torch.device,
+) -> Dict[str, object]:
+    """Snapshot of repo state, environment, and CLI args at training time.
+
+    Embedded into the .labels.json so future readers can answer "what produced
+    this checkpoint?" without spelunking through git logs.
+    """
+    commit, dirty = _git_state(REPO_ROOT)
+    return {
+        "trained_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "git_commit": commit,
+        "git_dirty": dirty,
+        "torch": torch.__version__,
+        "cuda_available": torch.cuda.is_available(),
+        "cuda_device": (
+            torch.cuda.get_device_name(0)
+            if torch.cuda.is_available() and device.type == "cuda"
+            else None
+        ),
+        "python": sys.version.split()[0],
+        "platform": sys.platform,
+        "args": {
+            "product_type": args.product_type,
+            "device": device.type,
+            "epochs": args.epochs,
+            "batch_size": args.batch_size,
+            "lr": args.lr,
+            "max_samples": args.max_samples,
+            "num_workers": args.num_workers,
+            "seed": args.seed,
+            "pretrained": args.pretrained,
+        },
+        "min_samples_per_class": MIN_SAMPLES_PER_CLASS,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -268,6 +324,19 @@ def evaluate(
     valid_top1 = [v for v in top1_per_group.values() if not np.isnan(v)]
     top1_avg = float(np.mean(valid_top1)) if valid_top1 else float("nan")
 
+    # Per-class F1 within each group, plus the support (positives in val).
+    # Diagnostic to identify which specific classes the model fails on.
+    f1_per_class_per_group: Dict[str, Dict[str, Dict[str, float]]] = {}
+    for g in groups:
+        true_block = y_true[:, g.start:g.end]
+        pred_block = y_pred[:, g.start:g.end]
+        per_class = f1_score(true_block, pred_block, average=None, zero_division=0)
+        support = true_block.sum(axis=0)
+        f1_per_class_per_group[g.name] = {
+            cls_name: {"f1": float(per_class[i]), "support": int(support[i])}
+            for i, cls_name in enumerate(g.classes)
+        }
+
     return {
         "val_loss": float(np.mean(losses)),
         "val_f1_micro": float(f1_score(y_true, y_pred, average="micro", zero_division=0)),
@@ -275,6 +344,7 @@ def evaluate(
         "val_subset_acc": float((y_pred == y_true).all(axis=1).mean()),
         "val_top1_per_group": top1_per_group,
         "val_top1_avg": top1_avg,
+        "val_f1_per_class_per_group": f1_per_class_per_group,
     }
 
 
@@ -289,6 +359,9 @@ def train_one(
     num_workers: int,
     seed: int,
     pretrained: bool,
+    pos_weight: bool = False,
+    pos_weight_cap: float = 20.0,
+    trained_with: Optional[Dict[str, object]] = None,
 ) -> None:
     random.seed(seed)
     np.random.seed(seed)
@@ -324,7 +397,28 @@ def train_one(
 
     model = MultilabelClassifier(n_logits, pretrained=pretrained).to(device)
     print(f"[model] resnet18  pretrained={pretrained}  n_logits={n_logits}")
-    criterion = nn.BCEWithLogitsLoss()
+
+    # Optional pos_weight to compensate the class-imbalance pull on f1_macro.
+    # For each logit i: pos_weight_i = (#negatives_i / #positives_i), clamped.
+    # Multiplies positive-class contribution to the BCE loss, so rare classes
+    # weigh more during gradient updates.
+    if pos_weight:
+        pos_counts = torch.zeros(n_logits, dtype=torch.float32)
+        for i in range(len(train_ds)):
+            pos_counts += train_ds[i][1]
+        neg_counts = float(len(train_ds)) - pos_counts
+        weights = (neg_counts / pos_counts.clamp(min=1.0)).clamp(max=pos_weight_cap)
+        weights = weights.to(device)
+        criterion = nn.BCEWithLogitsLoss(pos_weight=weights)
+        print(
+            f"[loss] BCE pos_weight enabled  cap={pos_weight_cap}  "
+            f"min={weights.min().item():.2f}  max={weights.max().item():.2f}  "
+            f"mean={weights.mean().item():.2f}"
+        )
+    else:
+        criterion = nn.BCEWithLogitsLoss()
+        print("[loss] BCE (no pos_weight)")
+
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
 
@@ -385,6 +479,7 @@ def train_one(
                         ],
                         "best_epoch": best_epoch,
                         "best_val": metrics,
+                        "trained_with": trained_with or {},
                     },
                     f,
                     indent=2,
@@ -429,6 +524,14 @@ def parse_args() -> argparse.Namespace:
                    help="Use ImageNet-pretrained ResNet18 weights (default).")
     p.add_argument("--no-pretrained", dest="pretrained", action="store_false",
                    help="Train ResNet18 from scratch instead.")
+    p.add_argument("--pos-weight", action="store_true", default=False,
+                   help="Use pos_weight in BCEWithLogitsLoss "
+                        "(inverse-frequency weighting per logit, clamped). "
+                        "Lifts f1_macro on under-represented classes at the "
+                        "cost of f1_micro.")
+    p.add_argument("--pos-weight-cap", type=float, default=20.0,
+                   help="Maximum pos_weight per logit. Caps the boost given "
+                        "to extremely rare classes so the loss doesn't blow up.")
     return p.parse_args()
 
 
@@ -436,6 +539,10 @@ def main() -> None:
     args = parse_args()
     device = _resolve_device(args.device)
     print(f"[env] device={device}  torch={torch.__version__}")
+    trained_with = _capture_training_metadata(args=args, device=device)
+    if trained_with.get("git_commit"):
+        dirty_tag = " (dirty)" if trained_with.get("git_dirty") else ""
+        print(f"[env] git={trained_with['git_commit'][:10]}{dirty_tag}")
     train_one(
         args.product_type,
         device=device,
@@ -446,6 +553,9 @@ def main() -> None:
         num_workers=args.num_workers,
         seed=args.seed,
         pretrained=args.pretrained,
+        pos_weight=args.pos_weight,
+        pos_weight_cap=args.pos_weight_cap,
+        trained_with=trained_with,
     )
 
 

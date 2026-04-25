@@ -58,15 +58,125 @@
   ],
   "best_epoch": 7,
   "best_val": {
-    "val_loss": 0.22687211136023203,
-    "val_f1_micro": 0.6773700305810397,
-    "val_f1_macro": 0.37256407218203247,
-    "val_subset_acc": 0.17086834733893558,
+    "val_loss": 0.9086830417315165,
+    "val_f1_micro": 0.6424090338770388,
+    "val_f1_macro": 0.46935746486245417,
+    "val_subset_acc": 0.10644257703081232,
     "val_top1_per_group": {
-      "pocket_details": 0.4317862165963432,
-      "fit_silhouette": 0.7743300423131171,
-      "season": 0.8375350140056023
+      "pocket_details": 0.43319268635724334,
+      "fit_silhouette": 0.7362482369534555,
+      "season": 0.7927170868347339
     },
-    "val_top1_avg": 0.6812170909716876
+    "val_top1_avg": 0.6540526700484776,
+    "val_f1_per_class_per_group": {
+      "pocket_details": {
+        "Button-Pocket": {
+          "f1": 0.19047619047619047,
+          "support": 13
+        },
+        "Coin-Pocket": {
+          "f1": 0.4,
+          "support": 4
+        },
+        "Flap-Pocket": {
+          "f1": 0.0,
+          "support": 9
+        },
+        "Inner-Pocket": {
+          "f1": 0.0,
+          "support": 0
+        },
+        "Patch-Pocket": {
+          "f1": 0.31693989071038253,
+          "support": 58
+        },
+        "Pockets": {
+          "f1": 0.5579514824797843,
+          "support": 264
+        },
+        "Seam-Pocket": {
+          "f1": 0.30456852791878175,
+          "support": 107
+        },
+        "Slant-Pocket": {
+          "f1": 0.22556390977443608,
+          "support": 64
+        },
+        "Traditional-Five-Pocket": {
+          "f1": 0.5806451612903226,
+          "support": 52
+        },
+        "Welt-Pocket": {
+          "f1": 0.3855421686746988,
+          "support": 70
+        },
+        "Zipper-Pocket": {
+          "f1": 0.42718446601941745,
+          "support": 70
+        }
+      },
+      "fit_silhouette": {
+        "Fitted": {
+          "f1": 0.3076923076923077,
+          "support": 13
+        },
+        "Loose-Fit-Pant": {
+          "f1": 0.6169491525423729,
+          "support": 102
+        },
+        "Regular-Fit-Pant": {
+          "f1": 0.7927927927927928,
+          "support": 405
+        },
+        "Slim-Fit-Pant": {
+          "f1": 0.7732558139534884,
+          "support": 161
+        },
+        "Snug-Fit-Pant": {
+          "f1": 0.8,
+          "support": 28
+        }
+      },
+      "season": {
+        "Cold_Weather-Vacation": {
+          "f1": 0.6363636363636364,
+          "support": 13
+        },
+        "Fall": {
+          "f1": 0.8709677419354839,
+          "support": 391
+        },
+        "Spring": {
+          "f1": 0.8021978021978022,
+          "support": 247
+        },
+        "Tropical-Vacation": {
+          "f1": 0.39805825242718446,
+          "support": 63
+        }
+      }
+    }
+  },
+  "trained_with": {
+    "trained_at_utc": "2026-04-25T20:34:55+00:00",
+    "git_commit": "55200b6bdee02d246018c8204e9f79f8ad7ada98",
+    "git_dirty": true,
+    "torch": "2.11.0+cu128",
+    "cuda_available": true,
+    "cuda_device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "python": "3.14.0",
+    "platform": "win32",
+    "args": {
+      "product_type": "pants",
+      "device": "cuda",
+      "epochs": 15,
+      "batch_size": 128,
+      "lr": 0.0003,
+      "max_samples": 0,
+      "num_workers": 4,
+      "seed": 42,
+      "pretrained": true
+    },
+    "min_samples_per_class": 20
   }
 }
