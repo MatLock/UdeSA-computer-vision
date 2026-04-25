@@ -1,0 +1,87 @@
+{
+  "product_type": "tops",
+  "num_logits": 35,
+  "image_size": 224,
+  "normalize_mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "normalize_std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "min_samples_per_class": 20,
+  "groups": [
+    {
+      "name": "neck_style",
+      "start": 0,
+      "end": 26,
+      "classes": [
+        "Asymmetrical-Collar",
+        "Band-Collar",
+        "Boat-Neck",
+        "Collared-Neck",
+        "Cowl-Neck",
+        "Crew-Neck",
+        "Front-Keyhole",
+        "Funnel-Neck",
+        "Halter-Neck",
+        "Jewel-Neck",
+        "Mandarin-Collar-Neck",
+        "Mock-Neck",
+        "Neck-Tie",
+        "Notched-Collar",
+        "Notched-Neck",
+        "Open-Neckline",
+        "Peter-Pan-Collar",
+        "Pleated-Neck",
+        "Ruffled-Neck",
+        "Scoop-Neck",
+        "Split-Neck",
+        "Square-Neck",
+        "Stand-Collar",
+        "Sweetheart-Neck",
+        "Turtle-Neck",
+        "V-Neck"
+      ]
+    },
+    {
+      "name": "fit_silhouette",
+      "start": 26,
+      "end": 31,
+      "classes": [
+        "Classic-Fit",
+        "Fitted",
+        "Relaxed-Fit",
+        "Slim-Fit",
+        "Tailored-Fit"
+      ]
+    },
+    {
+      "name": "season",
+      "start": 31,
+      "end": 35,
+      "classes": [
+        "Cold_Weather-Vacation",
+        "Fall",
+        "Spring",
+        "Tropical-Vacation"
+      ]
+    }
+  ],
+  "best_epoch": 9,
+  "best_val": {
+    "val_loss": 0.10551984121020024,
+    "val_f1_micro": 0.7861698202709113,
+    "val_f1_macro": 0.5164439899957957,
+    "val_subset_acc": 0.412,
+    "val_top1_per_group": {
+      "neck_style": 0.7799322868574946,
+      "fit_silhouette": 0.8786945812807881,
+      "season": 0.704
+    },
+    "val_top1_avg": 0.7875422893794276
+  }
+}

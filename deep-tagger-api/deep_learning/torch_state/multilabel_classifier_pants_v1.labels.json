@@ -1,0 +1,72 @@
+{
+  "product_type": "pants",
+  "num_logits": 20,
+  "image_size": 224,
+  "normalize_mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "normalize_std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "min_samples_per_class": 20,
+  "groups": [
+    {
+      "name": "pocket_details",
+      "start": 0,
+      "end": 11,
+      "classes": [
+        "Button-Pocket",
+        "Coin-Pocket",
+        "Flap-Pocket",
+        "Inner-Pocket",
+        "Patch-Pocket",
+        "Pockets",
+        "Seam-Pocket",
+        "Slant-Pocket",
+        "Traditional-Five-Pocket",
+        "Welt-Pocket",
+        "Zipper-Pocket"
+      ]
+    },
+    {
+      "name": "fit_silhouette",
+      "start": 11,
+      "end": 16,
+      "classes": [
+        "Fitted",
+        "Loose-Fit-Pant",
+        "Regular-Fit-Pant",
+        "Slim-Fit-Pant",
+        "Snug-Fit-Pant"
+      ]
+    },
+    {
+      "name": "season",
+      "start": 16,
+      "end": 20,
+      "classes": [
+        "Cold_Weather-Vacation",
+        "Fall",
+        "Spring",
+        "Tropical-Vacation"
+      ]
+    }
+  ],
+  "best_epoch": 7,
+  "best_val": {
+    "val_loss": 0.22687211136023203,
+    "val_f1_micro": 0.6773700305810397,
+    "val_f1_macro": 0.37256407218203247,
+    "val_subset_acc": 0.17086834733893558,
+    "val_top1_per_group": {
+      "pocket_details": 0.4317862165963432,
+      "fit_silhouette": 0.7743300423131171,
+      "season": 0.8375350140056023
+    },
+    "val_top1_avg": 0.6812170909716876
+  }
+}

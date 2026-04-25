@@ -1,0 +1,99 @@
+{
+  "product_type": "shoes",
+  "num_logits": 47,
+  "image_size": 224,
+  "normalize_mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "normalize_std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "min_samples_per_class": 20,
+  "groups": [
+    {
+      "name": "wearing_occasion",
+      "start": 0,
+      "end": 13,
+      "classes": [
+        "Business-Casual",
+        "Casual",
+        "Cocktail",
+        "Day-Party",
+        "Formal",
+        "Indoor",
+        "Outdoor-Slipper",
+        "Outdoor_Activity",
+        "Party",
+        "Pool/Spa",
+        "Ski_Snowboard-Sports",
+        "Training-Gym",
+        "Work"
+      ]
+    },
+    {
+      "name": "style_silhouette",
+      "start": 13,
+      "end": 43,
+      "classes": [
+        "Athletic-Sneakers",
+        "Booties",
+        "Boots",
+        "Casual-Sneakers",
+        "Chelsea-Boots",
+        "Chukka-Boots",
+        "Clogs",
+        "Combat-Boots",
+        "Espadrilles",
+        "Fisherman-Sandal",
+        "Flats",
+        "Flip-Flops",
+        "High-Top-Sneakers",
+        "Hiking-Boots",
+        "Loafers",
+        "Low-Top-Sneakers",
+        "Moccasin",
+        "Motorcycle-Boots",
+        "Mules",
+        "Oxfords",
+        "Pumps",
+        "Rain-Boots",
+        "Riding-Boots",
+        "Sandals",
+        "Slides",
+        "Slippers",
+        "Smoking-Flats",
+        "Water-Shoes",
+        "Western-Boots",
+        "Winter-Boots"
+      ]
+    },
+    {
+      "name": "season",
+      "start": 43,
+      "end": 47,
+      "classes": [
+        "Cold_Weather-Vacation",
+        "Fall",
+        "Spring",
+        "Tropical-Vacation"
+      ]
+    }
+  ],
+  "best_epoch": 11,
+  "best_val": {
+    "val_loss": 0.06683916279247828,
+    "val_f1_micro": 0.820907455526684,
+    "val_f1_macro": 0.604417380656917,
+    "val_subset_acc": 0.49537037037037035,
+    "val_top1_per_group": {
+      "wearing_occasion": 0.7936231884057972,
+      "style_silhouette": 0.777196044211751,
+      "season": 0.9021990740740741
+    },
+    "val_top1_avg": 0.824339435563874
+  }
+}
