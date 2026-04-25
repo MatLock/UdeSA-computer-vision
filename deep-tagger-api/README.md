@@ -14,7 +14,7 @@ A FastAPI-based service that automatically generates e-commerce product metadata
               ┌─────────────────┼─────────────────┐
               │                 │                  │
      ┌────────▼────────┐ ┌─────▼──────┐  ┌────────▼────────┐
-     │  K-Means + KNN  │ │ TinyVGG CNN│  │  BLIP-2 VLM     │
+     │  K-Means        │ │ TinyVGG CNN│  │  BLIP-2 VLM     │
      │  Color Extract. │ │ Product    │  │  Title           │
      │                 │ │ Classifier │  │  Generation      │
      └────────┬────────┘ └─────┬──────┘  └────────┬────────┘
