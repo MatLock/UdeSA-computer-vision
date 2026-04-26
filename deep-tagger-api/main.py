@@ -45,6 +45,7 @@ def predict_from_image(request: DeepTaggerRequest) -> DeepTaggerResponse:
   return deep_tagger_response
 
 # test url https://i.postimg.cc/DwnSW-Dnh/test-shirt.avif
+#https://www.militarykit.com/cdn/shop/files/mens-gildan-short-sleeve-heavy-cotton-tshirt-royal-blue.jpg?v=1766053652&width=1500
 #https://http2.mlstatic.com/D_NQ_NP_2X_710446-MLA109522743040_042026-F.webp
 #https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSra_o0SB7t5Gb4GL5x-X7guFvalP2iVbJjPCHOs8623sGzIOP6MrQgs-A0T_go0cS2CCGNijpPC2dSsBI4PLCbYU8Cp_DVquVqbK7tcSOJ3AzBLoGzEKZv1Dw
 #https://theblacktux.com/cdn/shop/files/black-patent-leather-shoes-204587.jpg?v=1741187566&width=1200

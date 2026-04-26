@@ -5,32 +5,32 @@ A FastAPI-based service that automatically generates e-commerce product metadata
 ## How It Works
 
 ```
-                         ┌──────────────┐
-                         │  Image URL   │
-                         └──────┬───────┘
-                                │
-                        download & preprocess
-                                │
-              ┌─────────────────┼─────────────────┐
-              │                 │                  │
-     ┌────────▼────────┐ ┌─────▼──────┐  ┌────────▼────────┐
-     │  K-Means        │ │ TinyVGG CNN│  │  BLIP-2 VLM     │
-     │  Color Extract. │ │ Product    │  │  Title           │
-     │                 │ │ Classifier │  │  Generation      │
-     └────────┬────────┘ └─────┬──────┘  └────────┬────────┘
-              │                │                   │
-              └────────┬───────┴───────────────────┘
-                       │
-               ┌───────▼───────┐
-               │  Claude LLM   │
-               │  Description  │
-               │  Generation   │
-               └───────┬───────┘
-                       │
-              ┌────────▼────────┐
-              │ Structured JSON │
-              │    Response     │
-              └─────────────────┘
+                              ┌──────────────┐
+                              │  Image URL   │
+                              └──────┬───────┘
+                                     │
+                             download & preprocess
+                                     │
+         ┌──────────────┬────────────┼────────────────┐
+         │              │            │                │
+┌────────▼────────┐ ┌───▼────┐ ┌────▼──────────┐ ┌───▼──────────┐
+│  K-Means        │ │TinyVGG │ │  Multilabel   │ │  BLIP-2 VLM  │
+│  Color Extract. │ │Product │ │  Classifier   │ │  Title       │
+│                 │ │Classif.│ │  (ResNet-18)  │ │  Generation  │
+└────────┬────────┘ └───┬────┘ └────┬──────────┘ └───┬──────────┘
+         │              │           │                │
+         └──────┬───────┴───────────┴────────────────┘
+                │
+        ┌───────▼───────┐
+        │  Claude LLM   │
+        │  Description  │
+        │  Generation   │
+        └───────┬───────┘
+                │
+       ┌────────▼────────┐
+       │ Structured JSON │
+       │    Response     │
+       └─────────────────┘
 ```
 
 ## Models & Techniques
@@ -60,9 +60,24 @@ A traditional ML pipeline that identifies the dominant colors of the product.
 
 This returns human-readable color names (e.g. "navy blue", "red") without any deep learning overhead.
 
-**Source:** `machine_learning/knn_model.py`
+**Source:** `machine_learning/k_means.py`
 
-### 3. Product Title Generation — BLIP Vision-Language Transformer
+### 3. Attribute Tagging — Multilabel Classifier (ResNet-18)
+
+A set of per-product-type multilabel classifiers that predict attributes like material, occasion, and season from the product image.
+
+| Detail | Value |
+|---|---|
+| Architecture | ResNet-18 backbone with a custom linear head |
+| Input | 224x224 RGB image |
+| Output | One predicted class per attribute group (e.g. material, occasion, season) |
+| Weights | `deep_learning/torch_state/baseline_v1/multilabel_classifier_<type>_v1.pth` |
+
+Separate checkpoints are trained for `tops`, `shoes`, and `pants`. The TinyVGG product type prediction is mapped to one of these three categories to select the correct checkpoint. If no checkpoint is available for a product type, attribute tagging is skipped gracefully.
+
+**Source:** `deep_learning/multilabel_classifier.py`
+
+### 4. Product Title Generation — BLIP Vision-Language Transformer
 
 Uses the pre-trained **Salesforce/blip-image-captioning-base** model from Hugging Face to generate a short product title from the image.
 
@@ -70,7 +85,7 @@ The model receives the image along with the prompt *"the product name is"* and g
 
 **Source:** `transformer/blip_transformer.py`
 
-### 4. Product Description Generation — Claude LLM
+### 5. Product Description Generation — Claude LLM
 
 Once the product type, title, and tags have been determined by the previous models, they are sent to **Anthropic's Claude** (`claude-sonnet-4-20250514`) to generate a 2–3 sentence product description suitable for an e-commerce listing.
 
@@ -116,7 +131,7 @@ Generate product metadata from an image URL.
 }
 ```
 
-> **Note:** `material`, `occasion`, and `season` are currently hardcoded placeholders. Only `color` is dynamically predicted.
+> **Note:** `color` is predicted by K-Means clustering. The remaining tags (`material`, `occasion`, `season`, etc.) are predicted by the multilabel classifier when a checkpoint is available for the detected product type.
 
 Interactive docs are available at `/docs` (Swagger UI) and `/redoc` once the server is running.
 
@@ -166,17 +181,20 @@ deep-tagger-api/
 ├── model/
 │   ├── request/DeepTaggerRequest.py
 │   └── response/DeepTaggerResponse.py
-├── aux_functions/aux.py           # Image download & preprocessing
-├── machine_learning/knn_model.py  # K-Means + KNN color extraction
+├── aux_functions/auxiliary.py      # Image download & preprocessing
+├── machine_learning/k_means.py    # K-Means color extraction
 ├── transformer/blip_transformer.py# BLIP title generation
 ├── deep_learning/
 │   ├── product_type_classifier.py # TinyVGG CNN classifier
+│   ├── multilabel_classifier.py   # ResNet-18 attribute tagger
 │   └── torch_state/               # Saved model weights
+│       └── baseline_v1/           # Multilabel classifier checkpoints
 ├── llm/claude_client.py           # Claude description generation
 └── notebook/                      # Training & exploration notebooks
     ├── fashion_model_classifier_tiny_vgg.ipynb
     ├── multi_headed_cnn.ipynb
-    └── knn.ipynb
+    ├── multilabel_training_runs.ipynb
+    └── k_means.ipynb
 ```
 
 ## Tech Stack
@@ -188,8 +206,10 @@ deep-tagger-api/
 - **OpenCV** + **Pillow** — image processing
 - **Anthropic SDK** — Claude LLM integration
 
-## Author
+## Authors
 
 Jorge flores - jfflores90@gmail.com
+
 Hernán Marano - herchugm@gmail.com
+
 Nicolás Velázquez - 

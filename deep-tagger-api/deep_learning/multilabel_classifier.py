@@ -11,7 +11,7 @@ from PIL import Image
 from torchvision import transforms
 from torchvision.models import resnet18
 
-TORCH_STATE_DIR = Path(__file__).resolve().parent / "torch_state"
+TORCH_STATE_DIR = Path(__file__).resolve().parent / "torch_state/baseline_v1"
 PRODUCT_TYPES = ["tops", "shoes", "pants"]
 
 # Map product_type_classifier class names → multilabel checkpoint keys
@@ -57,7 +57,7 @@ def _load_model(product_type: str):
         meta = json.load(f)
 
     model = MultilabelClassifier(n_logits=meta["num_logits"])
-    model.backbone.load_state_dict(torch.load(ckpt_path, map_location=torch.device("cpu")))
+    model.load_state_dict(torch.load(ckpt_path, map_location=torch.device("cpu")))
     model.eval()
 
     transform = _build_transform(meta["normalize_mean"], meta["normalize_std"])
