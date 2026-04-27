@@ -23,5 +23,7 @@ See [`img-puller/README.md`](img-puller/README.md) for setup and usage details.
 ## Authors
 
 Jorge Federico Flores — jfflores90@gmail.com
+
 Hernán Marano - herchugm@gmail.com
+
 Nicolás Velázquez - 
