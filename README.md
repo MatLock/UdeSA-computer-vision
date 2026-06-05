@@ -2,6 +2,12 @@
 
 A Computer Vision course project at Universidad de San Andrés (UdeSA), consisting of tools for AI-powered image tagging and dataset preparation.
 
+## Demo
+
+<video src="https://github.com/user-attachments/assets/6f47bd3f-877b-4ed3-bb6f-0f218e168935" controls width="720"></video>
+
+
+
 ## Deep Tagger UI
 
 A React web application for AI-powered image tagging. Users submit a product image URL and receive AI-generated predictions including the product title, type, description, and visual tags overlaid on the image.

@@ -2,10 +2,6 @@
 
 A FastAPI-based service that automatically generates e-commerce product metadata from a single image URL. It combines multiple AI/ML techniques — a CNN classifier, K-Means color extraction, a vision-language transformer, and an LLM — to produce a structured product listing in one request.
 
-## Demo
-
-<video src="https://github.com/user-attachments/assets/6f47bd3f-877b-4ed3-bb6f-0f218e168935" controls width="720"></video>
-
 ## How It Works
 
 ```
