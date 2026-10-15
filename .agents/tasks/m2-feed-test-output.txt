@@ -1,0 +1,42 @@
+## Test execution evidence — Milestone 2: Merchant Feed
+## Command: python -m unittest positioner.tests.test_feed -v
+## Run from: c:\Users\u645020\Documents\MIA\UdeSA-computer-vision-plus
+
+test_csv_contract_accepts_complete_row (positioner.tests.test_feed.FeedTests.test_csv_contract_accepts_complete_row)
+A business dict with all required fields raises no exception. ... ok
+test_csv_contract_rejects_missing_price (positioner.tests.test_feed.FeedTests.test_csv_contract_rejects_missing_price)
+Missing 'price' raises ValueError naming the missing field. ... ok
+test_schema_mapping_full_apparel_record (positioner.tests.test_feed.FeedTests.test_schema_mapping_full_apparel_record)
+All 15 required Google Merchant apparel fields are present and non-None. ... ok
+test_validation_invalid_gtin (positioner.tests.test_feed.FeedTests.test_validation_invalid_gtin)
+A row with a GTIN that fails checksum is marked invalid with 'gtin_format'. ... ok
+test_validation_invalid_price_format (positioner.tests.test_feed.FeedTests.test_validation_invalid_price_format)
+A row whose price does not match '<number> <CURRENCY>' is marked invalid. ... ok
+test_validation_report_counts_consistent (positioner.tests.test_feed.FeedTests.test_validation_report_counts_consistent)
+valid_count + invalid_count == total; invalid_rows lists reasons. ... ok
+test_validation_valid_row_passes (positioner.tests.test_feed.FeedTests.test_validation_valid_row_passes)
+A row with valid gtin and valid price is marked valid. ... ok
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+OK
+
+---
+
+## Regression check — Milestone 1
+## Command: python -m unittest positioner.tests.test_enrichment -v
+
+test_category_mapping_known_type (positioner.tests.test_enrichment.EnrichmentTests.test_category_mapping_known_type)
+A known product type (mixed-case) maps to the correct taxonomy path. ... ok
+test_category_mapping_unknown_type_flagged (positioner.tests.test_enrichment.EnrichmentTests.test_category_mapping_unknown_type_flagged)
+An unknown product type leaves category unmapped and flags the row. ... ok
+test_enrich_missing_image_returns_partial (positioner.tests.test_enrichment.EnrichmentTests.test_enrich_missing_image_returns_partial)
+When the image cannot be downloaded the row is flagged 'partial'. ... ok
+test_enrich_single_row_returns_inferable_fields (positioner.tests.test_enrichment.EnrichmentTests.test_enrich_single_row_returns_inferable_fields)
+Happy-path: all image-based models succeed and populate every field. ... ok
+test_title_degrades_without_brand_or_size (positioner.tests.test_enrichment.EnrichmentTests.test_title_degrades_without_brand_or_size)
+Missing parts are silently dropped; no placeholder text is inserted. ... ok
+test_title_follows_structured_order (positioner.tests.test_enrichment.EnrichmentTests.test_title_follows_structured_order)
+Title parts appear in Brand->Gender->Product->Attribute->Color->Size order. ... ok
+----------------------------------------------------------------------
+Ran 6 tests in 0.004s
+OK
