@@ -261,6 +261,8 @@ See [`upgrade/requirements.md`](upgrade/requirements.md) for full details.
 
 Jorge Federico Flores — jfflores90@gmail.com
 
-Hernán Marano — herchugm@gmail.com
+Nilayvi Barrientos nilayvi@gmail.com
 
-Nicolás Velázquez
+Nicolás Velázquez nicoj.velazquez@gmail.com
+
+Ruben Ortigoza ortigozaruben@hotmail.com
