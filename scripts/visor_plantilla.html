@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Re-etiquetado Hito 2</title>
+<style>
+  :root { --bg: #fafafa; --fg: #1d1d1f; --muted: #6e6e73; --card: #fff; --line: #d2d2d7; --accent: #2c7fb8; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1e; --fg: #f2f2f7; --muted: #a1a1a6; --card: #2c2c2e; --line: #3a3a3c; --accent: #64a8dc; }
+  }
+  body { margin: 0; font-family: system-ui, sans-serif; background: var(--bg); color: var(--fg); }
+  header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 12px 16px;
+           display: flex; gap: 12px; align-items: center; flex-wrap: wrap; z-index: 1; }
+  header label { font-weight: 600; }
+  main { max-width: 1000px; margin: 0 auto; padding: 16px; }
+  .item { display: grid; grid-template-columns: minmax(0, 320px) 1fr; gap: 16px; background: var(--card);
+          border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-bottom: 16px; }
+  @media (max-width: 640px) { .item { grid-template-columns: 1fr; } }
+  .item img { width: 100%; height: auto; border-radius: 4px; background: #fff; }
+  .meta { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+  .campo { display: grid; grid-template-columns: 160px 1fr; gap: 8px; margin-bottom: 6px; align-items: center; }
+  select { width: 100%; padding: 4px; background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 4px; }
+  button { padding: 6px 14px; border-radius: 6px; border: 0; background: var(--accent); color: #fff; font-weight: 600; cursor: pointer; }
+  .progreso { color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <label for="quien">Etiquetador:</label>
+  <select id="quien" style="width:auto"><option value="A">A</option><option value="B">B</option></select>
+  <button id="exportar">Descargar CSV</button>
+  <span class="progreso" id="progreso"></span>
+</header>
+<main>
+  <p>Etiquetá cada imagen mirando solo la foto, sin consultar con la otra persona. Si un valor no se ve, elegí "otro / no se ve". El progreso se guarda en este navegador. Al terminar, descargá el CSV y guardalo como <code>data/etiquetado/etiquetador_A.csv</code> o <code>etiquetador_B.csv</code>.</p>
+  <div id="lista"></div>
+</main>
+<script>
+const ITEMS = __ITEMS__;
+const TAXONOMIA = __TAXONOMIA__;
+const ATRIBUTOS = __ATRIBUTOS__;
+const EXTRAS = __EXTRAS__;
+const COLUMNAS = __COLUMNAS__;
+
+const quien = document.getElementById("quien");
+const clave = () => "reetiquetado_" + quien.value;
+function leer() { try { return JSON.parse(localStorage.getItem(clave())) || {}; } catch (e) { return {}; } }
+function guardar(d) { try { localStorage.setItem(clave(), JSON.stringify(d)); } catch (e) {} }
+
+function opciones(valores, actual) {
+  return ['<option value=""></option>'].concat(valores.map(v =>
+    `<option ${v === actual ? "selected" : ""}>${v}</option>`)).join("");
+}
+
+function render() {
+  const datos = leer();
+  document.getElementById("lista").innerHTML = ITEMS.map((it, i) => {
+    const d = datos[it.id] || {};
+    const campos = ATRIBUTOS[it.categoria].map(a => [a, TAXONOMIA[it.categoria][a]])
+      .concat(Object.entries(EXTRAS));
+    return `<div class="item"><img loading="lazy" src="${it.img}" alt="imagen ${it.id}">
+      <div><div class="meta">${i + 1} de ${ITEMS.length} · id ${it.id} · categoría declarada: ${it.categoria}</div>
+      ${campos.map(([a, vals]) => `<div class="campo"><label>${a}</label>
+        <select data-id="${it.id}" data-attr="${a}">${opciones(vals, d[a])}</select></div>`).join("")}
+      </div></div>`;
+  }).join("");
+  progreso();
+}
+
+function progreso() {
+  const datos = leer();
+  const completos = ITEMS.filter(it => {
+    const d = datos[it.id] || {};
+    return ATRIBUTOS[it.categoria].concat(Object.keys(EXTRAS)).every(a => d[a]);
+  }).length;
+  document.getElementById("progreso").textContent = `${completos} de ${ITEMS.length} completas`;
+}
+
+document.getElementById("lista").addEventListener("change", e => {
+  const s = e.target;
+  if (!s.dataset.id) return;
+  const datos = leer();
+  datos[s.dataset.id] = Object.assign(datos[s.dataset.id] || {}, { [s.dataset.attr]: s.value });
+  guardar(datos);
+  progreso();
+});
+quien.addEventListener("change", render);
+
+document.getElementById("exportar").addEventListener("click", () => {
+  const datos = leer();
+  const esc = v => /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
+  const filas = ITEMS.map(it => COLUMNAS.map(c =>
+    c === "id" ? it.id : c === "categoria" ? it.categoria : c === "ruta_imagen" ? it.img.replace("../../", "") :
+    esc((datos[it.id] || {})[c] || "")).join(","));
+  const blob = new Blob([[COLUMNAS.join(",")].concat(filas).join("\n") + "\n"], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `etiquetador_${quien.value}.csv`;
+  a.click();
+});
+
+render();
+</script>
+</body>
+</html>

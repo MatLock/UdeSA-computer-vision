@@ -21,13 +21,13 @@ python main.py <path-to-csv>
 
 ```bash
 python main.py data/tops_tags.csv
-python main.py data/dresses_tags.csv
+python main.py data/shoes_tags.csv
 python main.py data/pants_tags.csv
 ```
 
 ## What it does
 
-1. Reads the CSV file and detects the product type from the filename (`tops`, `dresses`, or `pants`).
+1. Reads the CSV file and detects the product type from the filename (`tops`, `shoes`, or `pants`).
 2. Downloads each image from the `image_url` column into `images/<product_type>/`.
 3. Adds a `relative_path` column to the CSV with the local path to each downloaded image.
 
@@ -61,11 +61,11 @@ Only rows without a `title` are processed, and the CSV is saved every 100 rows, 
 .
 ├── data/
 │   ├── tops_tags.csv
-│   ├── dresses_tags.csv
+│   ├── shoes_tags.csv
 │   └── pants_tags.csv
 ├── images/
 │   ├── tops/
-│   ├── dresses/
+│   ├── shoes/
 │   └── pants/
 └── main.py
 ```

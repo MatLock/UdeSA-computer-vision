@@ -1,0 +1,317 @@
+{
+  "product_type": "shoes",
+  "num_logits": 47,
+  "image_size": 224,
+  "normalize_mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "normalize_std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "min_samples_per_class": 20,
+  "groups": [
+    {
+      "name": "wearing_occasion",
+      "start": 0,
+      "end": 13,
+      "classes": [
+        "Business-Casual",
+        "Casual",
+        "Cocktail",
+        "Day-Party",
+        "Formal",
+        "Indoor",
+        "Outdoor-Slipper",
+        "Outdoor_Activity",
+        "Party",
+        "Pool/Spa",
+        "Ski_Snowboard-Sports",
+        "Training-Gym",
+        "Work"
+      ]
+    },
+    {
+      "name": "style_silhouette",
+      "start": 13,
+      "end": 43,
+      "classes": [
+        "Athletic-Sneakers",
+        "Booties",
+        "Boots",
+        "Casual-Sneakers",
+        "Chelsea-Boots",
+        "Chukka-Boots",
+        "Clogs",
+        "Combat-Boots",
+        "Espadrilles",
+        "Fisherman-Sandal",
+        "Flats",
+        "Flip-Flops",
+        "High-Top-Sneakers",
+        "Hiking-Boots",
+        "Loafers",
+        "Low-Top-Sneakers",
+        "Moccasin",
+        "Motorcycle-Boots",
+        "Mules",
+        "Oxfords",
+        "Pumps",
+        "Rain-Boots",
+        "Riding-Boots",
+        "Sandals",
+        "Slides",
+        "Slippers",
+        "Smoking-Flats",
+        "Water-Shoes",
+        "Western-Boots",
+        "Winter-Boots"
+      ]
+    },
+    {
+      "name": "season",
+      "start": 43,
+      "end": 47,
+      "classes": [
+        "Cold_Weather-Vacation",
+        "Fall",
+        "Spring",
+        "Tropical-Vacation"
+      ]
+    }
+  ],
+  "best_epoch": 15,
+  "best_val": {
+    "val_loss": 0.06712753964321953,
+    "val_f1_micro": 0.8225082310685423,
+    "val_f1_macro": 0.6063427665543871,
+    "val_subset_acc": 0.5092592592592593,
+    "val_top1_per_group": {
+      "wearing_occasion": 0.7953623188405797,
+      "style_silhouette": 0.7620709714950553,
+      "season": 0.9074074074074074
+    },
+    "val_top1_avg": 0.8216135659143475,
+    "val_f1_per_class_per_group": {
+      "wearing_occasion": {
+        "Business-Casual": {
+          "f1": 0.6666666666666666,
+          "support": 11
+        },
+        "Casual": {
+          "f1": 0.79421768707483,
+          "support": 596
+        },
+        "Cocktail": {
+          "f1": 0.5098039215686274,
+          "support": 34
+        },
+        "Day-Party": {
+          "f1": 0.84,
+          "support": 604
+        },
+        "Formal": {
+          "f1": 0.2857142857142857,
+          "support": 15
+        },
+        "Indoor": {
+          "f1": 0.7272727272727273,
+          "support": 43
+        },
+        "Outdoor-Slipper": {
+          "f1": 0.7912087912087912,
+          "support": 47
+        },
+        "Outdoor_Activity": {
+          "f1": 0.757201646090535,
+          "support": 127
+        },
+        "Party": {
+          "f1": 0.6153846153846154,
+          "support": 63
+        },
+        "Pool/Spa": {
+          "f1": 0.42105263157894735,
+          "support": 24
+        },
+        "Ski_Snowboard-Sports": {
+          "f1": 0.0,
+          "support": 3
+        },
+        "Training-Gym": {
+          "f1": 0.8571428571428571,
+          "support": 4
+        },
+        "Work": {
+          "f1": 0.7647058823529411,
+          "support": 154
+        }
+      },
+      "style_silhouette": {
+        "Athletic-Sneakers": {
+          "f1": 0.3333333333333333,
+          "support": 4
+        },
+        "Booties": {
+          "f1": 0.6862302483069977,
+          "support": 226
+        },
+        "Boots": {
+          "f1": 0.6955017301038062,
+          "support": 294
+        },
+        "Casual-Sneakers": {
+          "f1": 0.7631578947368421,
+          "support": 41
+        },
+        "Chelsea-Boots": {
+          "f1": 0.9090909090909091,
+          "support": 99
+        },
+        "Chukka-Boots": {
+          "f1": 0.5714285714285714,
+          "support": 10
+        },
+        "Clogs": {
+          "f1": 0.64,
+          "support": 16
+        },
+        "Combat-Boots": {
+          "f1": 0.8993288590604027,
+          "support": 78
+        },
+        "Espadrilles": {
+          "f1": 0.42857142857142855,
+          "support": 19
+        },
+        "Fisherman-Sandal": {
+          "f1": 0.0,
+          "support": 0
+        },
+        "Flats": {
+          "f1": 0.6933333333333334,
+          "support": 37
+        },
+        "Flip-Flops": {
+          "f1": 0.0,
+          "support": 3
+        },
+        "High-Top-Sneakers": {
+          "f1": 0.4,
+          "support": 8
+        },
+        "Hiking-Boots": {
+          "f1": 0.5333333333333333,
+          "support": 10
+        },
+        "Loafers": {
+          "f1": 0.9161554192229039,
+          "support": 243
+        },
+        "Low-Top-Sneakers": {
+          "f1": 0.15384615384615385,
+          "support": 9
+        },
+        "Moccasin": {
+          "f1": 0.16666666666666666,
+          "support": 11
+        },
+        "Motorcycle-Boots": {
+          "f1": 0.5925925925925926,
+          "support": 16
+        },
+        "Mules": {
+          "f1": 0.5747126436781609,
+          "support": 47
+        },
+        "Oxfords": {
+          "f1": 0.0,
+          "support": 2
+        },
+        "Pumps": {
+          "f1": 0.7619047619047619,
+          "support": 23
+        },
+        "Rain-Boots": {
+          "f1": 0.875,
+          "support": 36
+        },
+        "Riding-Boots": {
+          "f1": 0.6857142857142857,
+          "support": 18
+        },
+        "Sandals": {
+          "f1": 0.8091168091168092,
+          "support": 187
+        },
+        "Slides": {
+          "f1": 0.8089887640449438,
+          "support": 92
+        },
+        "Slippers": {
+          "f1": 0.68,
+          "support": 28
+        },
+        "Smoking-Flats": {
+          "f1": 0.6,
+          "support": 14
+        },
+        "Water-Shoes": {
+          "f1": 1.0,
+          "support": 1
+        },
+        "Western-Boots": {
+          "f1": 0.7878787878787878,
+          "support": 38
+        },
+        "Winter-Boots": {
+          "f1": 0.8557692307692307,
+          "support": 109
+        }
+      },
+      "season": {
+        "Cold_Weather-Vacation": {
+          "f1": 0.5588235294117647,
+          "support": 81
+        },
+        "Fall": {
+          "f1": 0.961038961038961,
+          "support": 1301
+        },
+        "Spring": {
+          "f1": 0.25742574257425743,
+          "support": 65
+        },
+        "Tropical-Vacation": {
+          "f1": 0.8687943262411347,
+          "support": 281
+        }
+      }
+    }
+  },
+  "trained_with": {
+    "trained_at_utc": "2026-04-25T19:36:21+00:00",
+    "git_commit": "55200b6bdee02d246018c8204e9f79f8ad7ada98",
+    "git_dirty": true,
+    "torch": "2.11.0+cu128",
+    "cuda_available": true,
+    "cuda_device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "python": "3.14.0",
+    "platform": "win32",
+    "args": {
+      "product_type": "shoes",
+      "device": "cuda",
+      "epochs": 15,
+      "batch_size": 128,
+      "lr": 0.0003,
+      "max_samples": 0,
+      "num_workers": 4,
+      "seed": 42,
+      "pretrained": true
+    },
+    "min_samples_per_class": 20
+  }
+}
