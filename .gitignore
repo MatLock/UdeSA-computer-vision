@@ -1,1 +1,20 @@
 .claude
+
+# Agent task artifacts
+.agents/tasks/m2-feed-plan.md
+.agents/tasks/m2-feed-review.json
+.agents/tasks/m2-feed-review.md
+.agents/tasks/m3-publishing-plan.md
+.agents/tasks/m3-publishing-review.json
+.agents/tasks/m3-publishing-review.md
+.agents/tasks/m4-ads-plan.md
+.agents/tasks/positioner-review.json
+.agents/tasks/positioner-review.md
+
+# Python cache
+__pycache__/
+
+# Hito 2 (traído de UdeSA-toi)
+data/images/
+.venv/
+.ipynb_checkpoints/

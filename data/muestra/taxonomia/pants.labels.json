@@ -1,0 +1,182 @@
+{
+  "product_type": "pants",
+  "num_logits": 20,
+  "image_size": 224,
+  "normalize_mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "normalize_std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "min_samples_per_class": 20,
+  "groups": [
+    {
+      "name": "pocket_details",
+      "start": 0,
+      "end": 11,
+      "classes": [
+        "Button-Pocket",
+        "Coin-Pocket",
+        "Flap-Pocket",
+        "Inner-Pocket",
+        "Patch-Pocket",
+        "Pockets",
+        "Seam-Pocket",
+        "Slant-Pocket",
+        "Traditional-Five-Pocket",
+        "Welt-Pocket",
+        "Zipper-Pocket"
+      ]
+    },
+    {
+      "name": "fit_silhouette",
+      "start": 11,
+      "end": 16,
+      "classes": [
+        "Fitted",
+        "Loose-Fit-Pant",
+        "Regular-Fit-Pant",
+        "Slim-Fit-Pant",
+        "Snug-Fit-Pant"
+      ]
+    },
+    {
+      "name": "season",
+      "start": 16,
+      "end": 20,
+      "classes": [
+        "Cold_Weather-Vacation",
+        "Fall",
+        "Spring",
+        "Tropical-Vacation"
+      ]
+    }
+  ],
+  "best_epoch": 11,
+  "best_val": {
+    "val_loss": 0.2562255288163821,
+    "val_f1_micro": 0.6814964610717897,
+    "val_f1_macro": 0.4093844440296713,
+    "val_subset_acc": 0.20168067226890757,
+    "val_top1_per_group": {
+      "pocket_details": 0.44022503516174405,
+      "fit_silhouette": 0.770098730606488,
+      "season": 0.8389355742296919
+    },
+    "val_top1_avg": 0.6830864466659747,
+    "val_f1_per_class_per_group": {
+      "pocket_details": {
+        "Button-Pocket": {
+          "f1": 0.2222222222222222,
+          "support": 13
+        },
+        "Coin-Pocket": {
+          "f1": 0.0,
+          "support": 4
+        },
+        "Flap-Pocket": {
+          "f1": 0.0,
+          "support": 9
+        },
+        "Inner-Pocket": {
+          "f1": 0.0,
+          "support": 0
+        },
+        "Patch-Pocket": {
+          "f1": 0.3076923076923077,
+          "support": 58
+        },
+        "Pockets": {
+          "f1": 0.47843137254901963,
+          "support": 264
+        },
+        "Seam-Pocket": {
+          "f1": 0.2802547770700637,
+          "support": 107
+        },
+        "Slant-Pocket": {
+          "f1": 0.08,
+          "support": 64
+        },
+        "Traditional-Five-Pocket": {
+          "f1": 0.5909090909090909,
+          "support": 52
+        },
+        "Welt-Pocket": {
+          "f1": 0.23404255319148937,
+          "support": 70
+        },
+        "Zipper-Pocket": {
+          "f1": 0.39655172413793105,
+          "support": 70
+        }
+      },
+      "fit_silhouette": {
+        "Fitted": {
+          "f1": 0.0,
+          "support": 13
+        },
+        "Loose-Fit-Pant": {
+          "f1": 0.5632183908045977,
+          "support": 102
+        },
+        "Regular-Fit-Pant": {
+          "f1": 0.8313817330210773,
+          "support": 405
+        },
+        "Slim-Fit-Pant": {
+          "f1": 0.7570977917981072,
+          "support": 161
+        },
+        "Snug-Fit-Pant": {
+          "f1": 0.6046511627906976,
+          "support": 28
+        }
+      },
+      "season": {
+        "Cold_Weather-Vacation": {
+          "f1": 0.7,
+          "support": 13
+        },
+        "Fall": {
+          "f1": 0.9020100502512562,
+          "support": 391
+        },
+        "Spring": {
+          "f1": 0.8216432865731463,
+          "support": 247
+        },
+        "Tropical-Vacation": {
+          "f1": 0.4175824175824176,
+          "support": 63
+        }
+      }
+    }
+  },
+  "trained_with": {
+    "trained_at_utc": "2026-04-25T19:00:45+00:00",
+    "git_commit": "55200b6bdee02d246018c8204e9f79f8ad7ada98",
+    "git_dirty": true,
+    "torch": "2.11.0+cu128",
+    "cuda_available": true,
+    "cuda_device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "python": "3.14.0",
+    "platform": "win32",
+    "args": {
+      "product_type": "pants",
+      "device": "cuda",
+      "epochs": 15,
+      "batch_size": 128,
+      "lr": 0.0003,
+      "max_samples": 0,
+      "num_workers": 4,
+      "seed": 42,
+      "pretrained": true
+    },
+    "min_samples_per_class": 20
+  }
+}

@@ -14,7 +14,7 @@ A FastAPI-based service that automatically generates e-commerce product metadata
          ┌──────────────┬────────────┼────────────────┐
          │              │            │                │
 ┌────────▼────────┐ ┌───▼────┐ ┌────▼──────────┐ ┌───▼──────────┐
-│  K-Means        │ │TinyVGG │ │  Multilabel   │ │  BLIP-2 VLM  │
+│  K-Means        │ │TinyVGG │ │  Multilabel   │ │  BLIP VLM    │
 │  Color Extract. │ │Product │ │  Classifier   │ │  Title       │
 │                 │ │Classif.│ │  (ResNet-18)  │ │  Generation  │
 └────────┬────────┘ └───┬────┘ └────┬──────────┘ └───┬──────────┘
@@ -55,7 +55,7 @@ At inference time, the input image is resized to 28x28, converted to grayscale, 
 A traditional ML pipeline that identifies the dominant colors of the product.
 
 1. The image background is removed (white/transparent pixels are discarded).
-2. **K-Means clustering** (k=2) groups the remaining pixels into two dominant color clusters.
+2. **K-Means clustering** (k=1, `K_CLUSTERS` in `machine_learning/k_means.py`) finds the dominant color cluster of the remaining pixels.
 3. Each cluster centroid is matched to the nearest named color from a 22-color dictionary using **Euclidean distance** in RGB space.
 
 This returns human-readable color names (e.g. "navy blue", "red") without any deep learning overhead.
@@ -123,15 +123,15 @@ Generate product metadata from an image URL.
   "title": "short sleeve cotton tee",
   "description": "A classic short-sleeve cotton tee perfect for everyday wear...",
   "tags": {
-    "color": "blue/navy blue",
-    "material": "Denim",
-    "occasion": "Casual",
-    "season": "Summer"
+    "color": "navy blue",
+    "neck_style": "Crew-Neck",
+    "fit_silhouette": "Relaxed-Fit",
+    "season": "Spring"
   }
 }
 ```
 
-> **Note:** `color` is predicted by K-Means clustering. The remaining tags (`material`, `occasion`, `season`, etc.) are predicted by the multilabel classifier when a checkpoint is available for the detected product type.
+> **Note:** `color` is predicted by K-Means clustering. The remaining tags are predicted by the multilabel classifier when a checkpoint is available for the detected product type: `neck_style`, `fit_silhouette` and `season` for tops; `wearing_occasion`, `style_silhouette` and `season` for shoes; `pocket_details`, `fit_silhouette` and `season` for pants (see the `groups` field of each `*.labels.json` in `deep_learning/torch_state/baseline_v1/`). Material is not predicted.
 
 Interactive docs are available at `/docs` (Swagger UI) and `/redoc` once the server is running.
 
